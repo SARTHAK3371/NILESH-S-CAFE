@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Tables{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-white"><i class="bi bi-grid-3x3"></i> Table Management</h2>
+    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addTableModal"><i class="bi bi-plus-lg"></i> Add Table</button>
+</div>
+
+<div class="row g-4">
+{% for t in tables %}
+<div class="col-6 col-md-4 col-lg-3">
+    <div class="table-card {{ t.status }}">
+        <h3 class="mb-1">Table {{ t.number }}</h3>
+        <p class="mb-2 text-muted">Capacity: {{ t.capacity }}</p>
+        <span class="badge bg-{{ 'success' if t.status=='available' else ('danger' if t.status=='occupied' else 'warning') }} mb-3">{{ t.status|upper }}</span>
+        <div class="d-flex justify-content-center gap-1 flex-wrap">
+            <a href="{{ url_for('update_table_status', id=t.id, status='available') }}" class="btn btn-sm btn-outline-success">Free</a>
+            <a href="{{ url_for('update_table_status', id=t.id, status='occupied') }}" class="btn btn-sm btn-outline-danger">Occupy</a>
+            <a href="{{ url_for('update_table_status', id=t.id, status='reserved') }}" class="btn btn-sm btn-outline-warning">Reserve</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="modal fade" id="addTableModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('add_table') }}" class="modal-content bg-dark text-white">
+            <div class="modal-header"><h5 class="modal-title">Add Table</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="number" name="number" class="form-control mb-2" placeholder="Table Number" required min="1">
+                <input type="number" name="capacity" class="form-control" placeholder="Capacity" value="4" min="1">
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-warning">Add</button></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-white"><i class="bi bi-people"></i> Customers</h2>
+    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addCustomerModal"><i class="bi bi-plus-lg"></i> Add Customer</button>
+</div>
+
+<div class="card cafe-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0">
+                <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Email</th><th>Joined</th></tr></thead>
+                <tbody>
+                {% for c in customers %}
+                <tr>
+                    <td>{{ c.id }}</td>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.phone or '-' }}</td>
+                    <td>{{ c.email or '-' }}</td>
+                    <td>{{ c.created_at.strftime('%d/%m/%Y') }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center py-4">No customers yet</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ url_for('add_customer') }}" class="modal-content bg-dark text-white">
+            <div class="modal-header"><h5 class="modal-title">Add Customer</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="text" name="name" class="form-control mb-2" placeholder="Name" required>
+                <input type="text" name="phone" class="form-control mb-2" placeholder="Phone">
+                <input type="email" name="email" class="form-control" placeholder="Email">
+            </div>
+            <div class="modal-footer"><button type="submit" class="btn btn-warning">Add</button></div>
+        </form>
+    </div>
+</div>
+{% endblock %}

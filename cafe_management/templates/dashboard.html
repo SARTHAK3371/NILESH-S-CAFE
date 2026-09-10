@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-white"><i class="bi bi-speedometer2"></i> Dashboard</h2>
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-orange">
+            <div class="stat-icon"><i class="bi bi-currency-rupee"></i></div>
+            <div>
+                <h3>₹{{ "%.0f"|format(total_sales) }}</h3>
+                <p class="mb-0">Today's Sales</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-blue">
+            <div class="stat-icon"><i class="bi bi-receipt"></i></div>
+            <div>
+                <h3>{{ order_count }}</h3>
+                <p class="mb-0">Today's Orders</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-purple">
+            <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+                <h3>{{ pending }} / {{ preparing }}</h3>
+                <p class="mb-0">Pending / Preparing</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-green">
+            <div class="stat-icon"><i class="bi bi-grid-3x3"></i></div>
+            <div>
+                <h3>{{ available_tables }}</h3>
+                <p class="mb-0">Available Tables</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card cafe-card">
+            <div class="card-header">Recent Orders</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead><tr><th>#</th><th>Table</th><th>Amount</th><th>Status</th><th>Time</th></tr></thead>
+                        <tbody>
+                        {% for o in recent_orders %}
+                        <tr>
+                            <td>{{ o.id }}</td>
+                            <td>{{ o.table.number if o.table else 'Takeaway' }}</td>
+                            <td>₹{{ "%.0f"|format(o.total_amount) }}</td>
+                            <td><span class="badge status-{{ o.status }}">{{ o.status }}</span></td>
+                            <td>{{ o.created_at.strftime('%H:%M') }}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-center py-4">No orders yet</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card cafe-card">
+            <div class="card-header">Popular Items</div>
+            <div class="card-body">
+                {% for name, qty in popular %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>{{ name }}</span>
+                    <span class="badge bg-warning text-dark">{{ qty }} sold</span>
+                </div>
+                {% else %}
+                <p class="text-muted">No data yet</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

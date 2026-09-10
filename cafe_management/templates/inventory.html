@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Inventory{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-white"><i class="bi bi-box-seam"></i> Inventory</h2>
+
+<div class="card cafe-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0">
+                <thead><tr><th>Item</th><th>Category</th><th>Stock</th><th>Price</th><th>Status</th><th>Update</th></tr></thead>
+                <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category.name if item.category else '-' }}</td>
+                    <td>
+                        <span class="badge {{ 'bg-danger' if item.stock < 10 else ('bg-warning text-dark' if item.stock < 30 else 'bg-success') }}">
+                            {{ item.stock }}
+                        </span>
+                    </td>
+                    <td>₹{{ item.price }}</td>
+                    <td>{{ 'Available' if item.is_available else 'Out of Stock' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('update_stock', id=item.id) }}" class="d-flex gap-1">
+                            <input type="number" name="stock" class="form-control form-control-sm" style="width:80px" value="{{ item.stock }}" min="0">
+                            <button type="submit" class="btn btn-sm btn-warning">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
