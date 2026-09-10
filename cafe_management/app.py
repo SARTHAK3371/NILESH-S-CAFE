@@ -32,14 +32,16 @@ login_manager.login_message_category = 'info'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-def init_db():
-    with app.app_context():
-        db.create_all()
-        # Default admin
-        if not User.query.filter_by(username='SARTHAK WALUNJ').first():
-            admin = User(username='admin', name='Admin', role='admin')
-            admin.set_password('3371')
-            db.session.add(admin)
+# Admin user create / update
+admin = User.query.filter_by(username='SARTHAKWALUNJ').first()
+if not admin:
+    admin = User(username='SARTHAKWALUNJ', name='SARTHAK WALUNJ', role='admin')
+    admin.set_password('3371')
+    db.session.add(admin)
+else:
+    admin.set_password('3371')
+    admin.name = 'SARTHAK WALUNJ'
+db.session.commit()
 
         # Sample categories
         if Category.query.count() == 0:
