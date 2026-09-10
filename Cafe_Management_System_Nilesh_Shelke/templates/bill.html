@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill - Order #{{ order.id }} | Cafe Management</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier New', monospace; max-width: 320px; margin: 20px auto; padding: 15px; }
+        .header { text-align: center; border-bottom: 2px dashed #333; padding-bottom: 10px; margin-bottom: 10px; }
+        .header h2 { font-size: 1.4rem; }
+        .header p { font-size: 0.85rem; color: #555; }
+        .info { font-size: 0.85rem; margin-bottom: 10px; }
+        .info div { display: flex; justify-content: space-between; margin: 3px 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0; }
+        th, td { padding: 4px 0; text-align: left; }
+        th { border-bottom: 1px solid #333; }
+        .total-row { border-top: 2px dashed #333; font-weight: bold; font-size: 1rem; }
+        .footer { text-align: center; margin-top: 15px; border-top: 2px dashed #333; padding-top: 10px; font-size: 0.8rem; }
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+        }
+        .btn-print { display: block; width: 100%; padding: 10px; margin-top: 15px; background: #333; color: white; border: none; cursor: pointer; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>☕ CAFE</h2>
+        <p>Cafe Management System</p>
+        <p>by Nilesh Shelke</p>
+    </div>
+
+    <div class="info">
+        <div><span>Order #:</span> <strong>{{ order.id }}</strong></div>
+        <div><span>Table:</span> <strong>{{ order.table_number }}</strong></div>
+        <div><span>Customer:</span> {{ order.customer_name }}</div>
+        <div><span>Date:</span> {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</div>
+        <div><span>Status:</span> {{ order.status }}</div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th style="text-align:center">Qty</th>
+                <th style="text-align:right">Amt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for oi in order.items %}
+            <tr>
+                <td>{{ oi.menu_item.name if oi.menu_item else 'Item' }}</td>
+                <td style="text-align:center">{{ oi.quantity }}</td>
+                <td style="text-align:right">{{ "%.2f"|format(oi.price * oi.quantity) }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="2">TOTAL</td>
+                <td style="text-align:right">₹{{ "%.2f"|format(order.total_amount) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Thank you for visiting!</p>
+        <p>Please visit again 😊</p>
+        <p style="margin-top:8px; font-size:0.7rem;">Developed by Nilesh Shelke</p>
+    </div>
+
+    <button class="btn-print no-print" onclick="window.print()">🖨️ Print Bill</button>
+</body>
+</html>
