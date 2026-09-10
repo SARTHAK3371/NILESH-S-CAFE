@@ -36,9 +36,9 @@ def init_db():
     with app.app_context():
         db.create_all()
         # Default admin
-        if not User.query.filter_by(username='admin').first():
+        if not User.query.filter_by(username='SARTHAK WALUNJ').first():
             admin = User(username='admin', name='Admin', role='admin')
-            admin.set_password('admin123')
+            admin.set_password('3371')
             db.session.add(admin)
 
         # Sample categories
