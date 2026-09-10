@@ -307,6 +307,9 @@ def bill(order_id):
     order = Order.query.get_or_404(order_id)
     return render_template('bill.html', order=order)
 
-if __name__ == '__main__':
+# Tables create करा (Render + Local दोन्हीसाठी)
+with app.app_context():
     init_db()
+
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
