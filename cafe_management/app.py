@@ -1027,10 +1027,15 @@ def bill(order_id):
 
 
 # =========================================================
-# CREATE DATABASE
+# CREATE DATABASE TABLES AND INITIAL DATA
 # =========================================================
 
 with app.app_context():
+
+    # Create all database tables
+    db.create_all()
+
+    # Create default admin and sample data
     init_db()
 
 
